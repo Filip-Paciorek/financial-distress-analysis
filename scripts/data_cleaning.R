@@ -91,3 +91,4 @@ mean(is.na(slim_clean_df)) * 100
 slim_clean_df <- drop_na(slim_clean_df)
 #one company cut out
 sum(slim_clean_df$class == 1)
+saveRDS(slim_clean_df, file = here("data", "processed", "clean_5th_year.rds"))
