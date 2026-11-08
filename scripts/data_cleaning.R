@@ -92,3 +92,18 @@ slim_clean_df <- drop_na(slim_clean_df)
 #one company cut out
 sum(slim_clean_df$class == 1)
 saveRDS(slim_clean_df, file = here("data", "processed", "clean_5th_year.rds"))
+fat_clean_df <- subset(raw_data,select=-c(current_assets_no_inv_to_lt_liab,operating_profit_to_fin_expenses,sales_growth))
+fat_clean_df <- drop_na(fat_clean_df)
+#49 companies cut out, but way more columns left
+sum(fat_clean_df$class == 1)
+saveRDS(fat_clean_df, file = here("data","processed","clean_5th_year_fat.rds"))
+
+
+
+
+
+
+
+
+
+
