@@ -137,18 +137,33 @@ pred_rf_fat <- learner_rf_fat$predict(task_fat,row_ids=test_set_fat)
 pred_rf_fat$confusion
 
 #random forest with weights
-learner_rf2_fat <- lrn("classif.ranger",predict_type="prob",class.weights=c("0"=1,"1"=13.5))
+learner_rf2_fat <- lrn("classif.ranger",predict_type="prob",class.weights=c("0"=1,"1"=13.5),importance="permutation")
 
 learner_rf2_fat$train(task_fat,row_ids=train_set_fat)
-
+learner_rf2_fat$importance()
 pred_rf2_fat <- learner_rf2_fat$predict(task_fat,row_ids=test_set_fat)
 
 pred_rf2_fat$confusion
 
+
+
 #random forest with better thresholds
 pred_rf2_fat$set_threshold(c("0"=0.85,"1"=0.15))
 pred_rf2_fat$confusion
+install.packages("rpart")
+install.packages("rpart.plot")
+library(rpart)
+library(rpart.plot)
 
+surrogate_tree <- rpart(class ~ ., data = fat_clean_df, method = "class", control = rpart.control(maxdepth = 3))
+png("model_decision_tree.png", width = 1400, height = 900, res = 150)
+rpart.plot(surrogate_tree, 
+           type = 4,                     
+           extra = 104,                  
+           box.palette = c("skyblue", "pink"), 
+           shadow.col = "gray",          
+           branch.lty = 3,              
+           main = "Uproszczona logika modelu Random Forest")
 weights_results_fat <- data.frame(bankrupt_weight = numeric(),bankrupt_threshold = numeric(), AUC = numeric(),bankrupcies_found = numeric(),false_alarms=numeric())
 for (weight in test_weights)
 {
